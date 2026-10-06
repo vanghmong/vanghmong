@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ຮ້ານຂາຍໄອດີເກມ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f1fb;--card:#fff;--text:#161428;--muted:#6a6785;--line:#e2dff2;--a:#e63e68;--b:#0a8fb0;--ok:#12805c;--input:#fff;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0f1f;--card:#181a30;--text:#eeeefb;--muted:#9a9ccb;--line:#2a2d4d;--a:#ff6384;--b:#4de1ff;--ok:#4fe0a8;--input:#1f2240}}
+:root[data-theme="dark"]{--bg:#0e0f1f;--card:#181a30;--text:#eeeefb;--muted:#9a9ccb;--line:#2a2d4d;--a:#ff6384;--b:#4de1ff;--ok:#4fe0a8;--input:#1f2240}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:'Noto Sans Lao',system-ui,sans-serif;color:var(--text);
+  background:radial-gradient(50rem 30rem at 100% -10%,color-mix(in srgb,var(--a) 22%,transparent),transparent 60%),radial-gradient(44rem 28rem at -10% 0%,color-mix(in srgb,var(--b) 20%,transparent),transparent 60%),var(--bg);background-attachment:fixed}
+button,input,select,textarea{font:inherit;color:inherit}
+.hidden{display:none!important}
+.num{font-family:Rajdhani,'Noto Sans Lao',sans-serif;font-weight:700}
+:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:600;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--a),color-mix(in srgb,var(--a) 50%,#7c4dff));transition:transform .15s,filter .15s}
+.btn:hover{filter:brightness(1.1)}.btn:active{transform:scale(.96)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.sm{padding:7px 12px;font-size:14px}.btn.block{width:100%}
+.btn.warn{background:transparent;color:var(--a);border:1px solid var(--a)}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field label{font-size:13px;color:var(--muted)}
+.field input,.field select,.field textarea{padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--input);width:100%}
+.err{color:var(--a);font-size:13px;min-height:18px;margin-bottom:6px}
+
+/* Login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lbox{width:100%;max-width:380px;background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:28px;padding:30px 24px;box-shadow:0 30px 70px -30px rgba(60,40,140,.5)}
+.brand{font-size:40px;line-height:1;text-align:center;margin-bottom:6px}
+.lbox h1{text-align:center;margin:0 0 4px;font-size:24px;font-weight:800}
+.lbox p{text-align:center;color:var(--muted);margin:0 0 22px}
+.or{text-align:center;color:var(--muted);font-size:13px;margin:12px 0}
+
+/* App */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:color-mix(in srgb,var(--card) 75%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+header h2{margin:0;font-size:18px;font-weight:800}
+.hr{display:flex;gap:8px;align-items:center}
+main{max-width:1000px;margin:0 auto;padding:18px 16px 90px}
+.tools{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.search{padding:13px 16px;border-radius:14px;border:1px solid var(--line);background:var(--input);width:100%}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;white-space:nowrap;font-size:14px}
+.chip.on{background:var(--b);color:#06222b;border-color:transparent;font-weight:700}
+.stats{display:flex;gap:10px;margin-bottom:16px}
+.stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:13px;color:var(--muted)}
+.stat b{display:block;font-size:26px;color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:hsl(var(--h) 80% 58%)}
+.item.sold{opacity:.55}
+.gm{align-self:flex-start;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:hsl(var(--h) 80% 58% / .18);color:hsl(var(--h) 70% 45%)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .gm{color:hsl(var(--h) 90% 75%)}}
+:root[data-theme="dark"] .gm{color:hsl(var(--h) 90% 75%)}
+.item h3{margin:0;font-size:17px;font-weight:800}
+.meta{color:var(--muted);font-size:14px}
+.price{font-size:28px;color:var(--a)}
+.acts{display:flex;gap:8px;margin-top:4px}
+.acts .btn{flex:1;text-align:center;text-decoration:none}
+.tag{position:absolute;right:12px;top:12px;font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--line);padding:2px 9px;border-radius:999px}
+.empty{text-align:center;color:var(--muted);padding:60px 0}
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:0 14px 30px -10px var(--a);padding:14px 22px;border-radius:999px}
+
+dialog{border:0;border-radius:24px;padding:22px;width:min(440px,calc(100% - 24px));max-height:92vh;background:var(--card);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+dialog::backdrop{background:rgba(5,6,20,.6);backdrop-filter:blur(5px)}
+dialog h3{margin:0 0 14px}
+.thumb{position:relative;margin:-16px -16px 4px -11px;aspect-ratio:16/10;background:linear-gradient(135deg,hsl(var(--h) 70% 55%/.35),hsl(var(--h) 70% 35%/.25));display:grid;place-items:center;overflow:hidden;cursor:zoom-in;border:0;padding:0;width:calc(100% + 27px)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ph0{font-size:44px;opacity:.55;cursor:default}
+.thumb .cnt{position:absolute;right:10px;bottom:10px;background:rgba(10,10,30,.7);color:#fff;font-size:12px;padding:3px 10px;border-radius:999px}
+.item .tag{z-index:2}
+.sortrow{display:flex;gap:8px}.sortrow select{padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--input)}
+.photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:6px}
+.pt{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--input)}
+.pt img{width:100%;height:100%;object-fit:cover}
+.pt button{position:absolute;right:3px;top:3px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(10,10,30,.75);color:#fff;cursor:pointer;line-height:1}
+.pt .main{position:absolute;left:3px;bottom:3px;background:var(--b);color:#06222b;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px}
+.addph{aspect-ratio:1;border:2px dashed var(--line);border-radius:12px;display:grid;place-items:center;text-align:center;font-size:12px;color:var(--muted);cursor:pointer;padding:4px}
+.addph b{display:block;font-size:22px;color:var(--b)}
+.addph:hover,.drag .addph{border-color:var(--b)}
+.hint{font-size:12px;color:var(--muted);margin:0 0 12px}
+#lb{width:min(900px,calc(100% - 16px));background:#0b0c1a;padding:10px;color:#fff}
+#lb img{width:100%;max-height:78vh;object-fit:contain;display:block;border-radius:14px}
+.lbbar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 4px 0}
+.lbbar .btn{color:#fff}
+dialog#dlg{overflow:auto}
+#wd{width:min(460px,calc(100% - 16px));text-align:center}
+.wheelbox{position:relative;width:min(320px,80vw);margin:6px auto 14px;aspect-ratio:1}
+#wheel{width:100%;height:100%;border-radius:50%;box-shadow:0 0 0 6px var(--card),0 0 0 8px var(--line),0 20px 40px -18px rgba(60,40,140,.6);transition:transform 4.6s cubic-bezier(.12,.7,.1,1)}
+.ptr{position:absolute;left:50%;top:-8px;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid var(--a);filter:drop-shadow(0 2px 2px rgba(0,0,0,.35));z-index:2}
+.hub{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px;border-radius:50%;background:var(--card);border:3px solid var(--line);display:grid;place-items:center;font-size:20px}
+#wres{min-height:34px;font-size:22px;font-weight:800;color:var(--a);margin-bottom:10px}
+.wed{text-align:left;border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.wed h4{margin:0 0 8px;font-size:15px}
+.wrow{display:flex;gap:6px;margin-bottom:6px}
+.wrow input{flex:1;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--input);min-width:0}
+.wrow .sw{width:12px;border-radius:6px;flex:none}
+.wimg{position:relative;flex:none;width:42px;height:42px;border-radius:10px;border:2px dashed var(--line);display:grid;place-items:center;cursor:pointer;overflow:hidden;font-size:18px;color:var(--b);background:var(--input)}
+.wimg.has{border-style:solid}.wimg img{width:100%;height:100%;object-fit:cover}
+.wimg input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.wrow{align-items:center}
+.wrow input.wp{flex:none;width:64px;text-align:center;padding:9px 4px}
+.pc{font-size:13px;color:var(--muted);margin-left:-3px}
+#wtot{font-weight:700;margin:2px 0 8px}
+#wtot.ok{color:var(--ok)}#wtot.bad{color:var(--a)}
+.wrm{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:12px;padding:0 2px}
+#wres img{width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 6px;border:3px solid var(--a)}
+
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#272a45;color:#fff;padding:11px 18px;border-radius:12px;z-index:60}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <form class="lbox" id="lf">
+    <div class="brand">🎮</div>
+    <h1>ຮ້ານຂາຍໄອດີເກມ</h1>
+    <p>ເຂົ້າສູ່ລະບົບເພື່ອຈັດການໄອດີ</p>
+    <div class="field"><label for="u">ຊື່ຜູ້ໃຊ້</label><input id="u" autocomplete="username"></div>
+    <div class="field"><label for="p">ລະຫັດຜ່ານ</label><input id="p" type="password" autocomplete="current-password"></div>
+    <div class="err" id="le"></div>
+    <button class="btn block" type="submit">ເຂົ້າສູ່ລະບົບ</button>
+    <div class="or">ຫຼື</div>
+    <button class="btn ghost block" type="button" id="guest">ເບິ່ງໄອດີທີ່ຂາຍ</button>
+  </form>
+</section>
+
+<section id="app" class="hidden">
+  <header>
+    <h2>🎮 ຮ້ານຂາຍໄອດີເກມ</h2>
+    <div class="hr"><button class="btn ghost sm" id="wbtn">🎡 ວົງລໍ້ສຸ່ມ</button><button class="btn ghost sm" id="theme" title="ປ່ຽນໂໝດ">🌓</button><button class="btn ghost sm" id="out">ອອກ</button></div>
+  </header>
+  <main>
+    <div class="stats hidden" id="stats"></div>
+    <div class="tools"><input class="search" id="q" placeholder="ຄົ້ນຫາເກມ ຫຼື ໄອດີ…"><div class="chips" id="chips"></div><div class="sortrow"><select id="sort" aria-label="ຮຽງລຳດັບ"><option value="new">ໃໝ່ສຸດ</option><option value="lo">ລາຄາຕ່ຳ → ສູງ</option><option value="hi">ລາຄາສູງ → ຕ່ຳ</option></select></div></div>
+    <div class="grid" id="grid"></div>
+  </main>
+  <button class="btn fab hidden" id="add">➕ ເພີ່ມໄອດີ</button>
+</section>
+
+<dialog id="dlg">
+  <form id="af">
+    <h3 id="dt">➕ ເພີ່ມໄອດີຂາຍ</h3>
+    <div class="field"><label>ຮູບໄອດີທີ່ຈະຂາຍ (ສູງສຸດ 6 ຮູບ)</label><div class="photos" id="photos"></div><p class="hint">ກົດຊ່ອງ + ຫຼື ລາກຮູບມາວາງ • ຮູບທຳອິດຈະເປັນຮູບໜ້າປົກ</p><input type="file" id="file" accept="image/*" multiple class="hidden"></div>
+    <div class="field"><label for="g">ຊື່ເກມ</label><input id="g" list="games" placeholder="ເຊັ່ນ Free Fire"><datalist id="games"><option>Free Fire</option><option>PUBG Mobile</option><option>Mobile Legends</option><option>ROV</option><option>Genshin Impact</option><option>Roblox</option></datalist></div>
+    <div class="field"><label for="t">ຊື່ໄອດີ / ຫົວຂໍ້</label><input id="t" placeholder="ເຊັ່ນ ໄອດີ Grandmaster ສກິນຄົບ"></div>
+    <div class="two">
+      <div class="field"><label for="lv">ເລເວວ / ແຣັງ</label><input id="lv" placeholder="Lv.70 / Mythic"></div>
+      <div class="field"><label for="pr">ລາຄາ (ກີບ)</label><input id="pr" type="number" min="0" inputmode="numeric"></div>
+    </div>
+    <div class="field"><label for="ct">ເບີຕິດຕໍ່ (WhatsApp)</label><input id="ct" type="tel" placeholder="020 xxxx xxxx"></div>
+    <div class="field"><label for="nt">ລາຍລະອຽດ (ບໍ່ບັງຄັບ)</label><textarea id="nt" rows="2"></textarea></div>
+    <div class="err" id="ae"></div>
+    <div class="row"><button class="btn ghost" type="button" id="cx">ຍົກເລີກ</button><button class="btn" type="submit">ບັນທຶກ</button></div>
+  </form>
+</dialog>
+<dialog id="wd">
+  <h3>🎡 ວົງລໍ້ສຸ່ມ</h3>
+  <div class="wheelbox"><div class="ptr"></div><canvas id="wheel" width="640" height="640"></canvas><div class="hub">🎮</div></div>
+  <div id="wres" aria-live="polite"></div>
+  <div class="row" style="justify-content:center"><button class="btn" id="spin">ໝູນເລີຍ!</button><button class="btn ghost" id="wx">ປິດ</button></div>
+  <div class="wed hidden" id="wed">
+    <h4>ກຳນົດລາງວັນໃນວົງລໍ້ (2–12 ຊ່ອງ)</h4><p class="hint">ກົດຊ່ອງ 🖼️ ເພື່ອເພີ່ມຮູບລາງວັນ (ບໍ່ບັງຄັບ) • ໃສ່ % ໂອກາດທີ່ຈະໄດ້ ລວມກັນຕ້ອງໄດ້ 100%</p>
+    <div id="wlist"></div>
+    <div id="wtot" class="hint"></div>
+    <div class="err" id="wer"></div>
+    <div class="row" style="justify-content:flex-start"><button class="btn ghost sm" id="wadd" type="button">➕ ເພີ່ມຊ່ອງ</button><button class="btn ghost sm" id="weq" type="button">⚖️ ແບ່ງເທົ່າກັນ</button><button class="btn sm" id="wsave" type="button">ບັນທຶກວົງລໍ້</button></div>
+  </div>
+</dialog>
+<dialog id="lb"><img id="lbi" alt=""><div class="lbbar"><button class="btn ghost sm" id="lbp">‹</button><span id="lbc"></span><button class="btn ghost sm" id="lbn">›</button><button class="btn ghost sm" id="lbx">✕</button></div></dialog>
+<div id="toast" class="hidden"></div>
+
+<script>
+// ບັນຊີຜູ້ຂາຍ (ເຈົ້າຂອງຮ້ານ) — ປ່ຽນໄດ້ຢູ່ນີ້. ໝາຍເຫດ: ເປັນການກວດໃນໜ້າເວັບເທົ່ານັ້ນ ບໍ່ປອດໄພຮອດລະດັບ server
+const ADMIN_USER = 'admin', ADMIN_PASS = '1234';
+const KEY = 'gameid_shop_v2', ROLE = 'gameid_role';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = v => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ກີບ';
+const hue = s => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7);
+function lsGet(k){ try { return localStorage.getItem(k); } catch(_){ return null; } }
+function lsSet(k, v){ try { localStorage.setItem(k, v); return true; } catch(_){ return false; } }
+function ssGet(k){ try { return sessionStorage.getItem(k); } catch(_){ return null; } }
+function ssSet(k, v){ try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch(_){} }
+
+let items = (() => { try { const d = JSON.parse(lsGet(KEY) || lsGet('gameid_shop_v1')); if (Array.isArray(d)) return d; } catch(_){}
+  return [
+    {id:'a1', game:'Free Fire', title:'ໄອດີ Grandmaster ສກິນຄົບ', level:'Lv.72', price:350000, contact:'02012345678', note:'ມີ Bundle ພິເສດ', sold:false},
+    {id:'a2', game:'Mobile Legends', title:'ໄອດີ Mythic 80 ຮີໂຣ', level:'Mythic', price:500000, contact:'02012345678', note:'', sold:false},
+    {id:'a3', game:'PUBG Mobile', title:'ໄອດີ Conqueror ຊຸດ M416', level:'Lv.60', price:800000, contact:'02012345678', note:'', sold:true}]; })();
+let role = ssGet(ROLE), q = '', gm = 'ທັງໝົດ', armed = null, sortBy = 'new', editId = null, pics = [], lbList = [], lbI = 0;
+const MAXP = 6;
+const save = () => { if (!lsSet(KEY, JSON.stringify(items))) { toast('ພື້ນທີ່ເກັບຂໍ້ມູນເຕັມ — ລຶບຮູບເກົ່າ ຫຼື ໃຊ້ຮູບໜ້ອຍລົງ'); return false; } return true; };
+const isAdmin = () => role === 'admin';
+
+let tt; function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.remove('hidden'); clearTimeout(tt); tt = setTimeout(() => t.classList.add('hidden'), 2500); }
+function waLink(c, m){ let d = String(c || '').replace(/\D/g, ''); if (!d) return ''; if (d.startsWith('0')) d = '856' + d.slice(1); return 'https://wa.me/' + d + (m ? '?text=' + encodeURIComponent(m) : ''); }
+
+function render(){
+  $('#login').classList.toggle('hidden', !!role);
+  $('#app').classList.toggle('hidden', !role);
+  $('#add').classList.toggle('hidden', !isAdmin());
+  $('#out').textContent = isAdmin() ? 'ອອກຈາກລະບົບ' : '← ເຂົ້າສູ່ລະບົບ';
+  if (!role) return;
+  const st = $('#stats'); st.classList.toggle('hidden', !isAdmin());
+  if (isAdmin()) st.innerHTML = `<div class="stat">ທັງໝົດ<b class="num">${items.length}</b></div><div class="stat">ກຳລັງຂາຍ<b class="num">${items.filter(i => !i.sold).length}</b></div><div class="stat">ຂາຍແລ້ວ<b class="num">${items.filter(i => i.sold).length}</b></div>`;
+  const games = ['ທັງໝົດ', ...new Set(items.map(i => i.game))];
+  if (!games.includes(gm)) gm = 'ທັງໝົດ';
+  $('#chips').innerHTML = games.map(g => `<button class="chip ${g === gm ? 'on' : ''}" data-g="${esc(g)}">${esc(g)}</button>`).join('');
+  const k = q.trim().toLowerCase();
+  const list = items.filter(i => (gm === 'ທັງໝົດ' || i.game === gm) && (!k || (i.game + ' ' + i.title + ' ' + i.level).toLowerCase().includes(k)))
+    .sort((a, b) => (a.sold - b.sold) || (sortBy === 'lo' ? a.price - b.price : sortBy === 'hi' ? b.price - a.price : 0));
+  $('#grid').innerHTML = list.length ? list.map(i => `
+    <article class="item ${i.sold ? 'sold' : ''}" style="--h:${hue(i.game)}">
+      ${i.sold ? '<span class="tag">ຂາຍແລ້ວ</span>' : ''}
+      ${(i.imgs && i.imgs.length) ? `<button class="thumb" data-lb="${i.id}" aria-label="ເບິ່ງຮູບ"><img src="${i.imgs[0]}" alt="${esc(i.title)}" loading="lazy">${i.imgs.length > 1 ? `<span class="cnt">📷 ${i.imgs.length}</span>` : ''}</button>` : '<div class="thumb"><span class="ph0">🎮</span></div>'}
+      <span class="gm">${esc(i.game)}</span>
+      <h3>${esc(i.title)}</h3>
+      <div class="meta">${esc(i.level)}${i.note ? ' • ' + esc(i.note) : ''}</div>
+      <div class="price num">${money(i.price)}</div>
+      <div class="acts">
+        ${isAdmin()
+          ? `<button class="btn ghost sm" data-edit="${i.id}">✏️ ແກ້ໄຂ</button><button class="btn ghost sm" data-sold="${i.id}">${i.sold ? 'ເປີດຂາຍຄືນ' : '✔ ຂາຍແລ້ວ'}</button><button class="btn warn sm" data-del="${i.id}">${armed === i.id ? 'ແນ່ໃຈບໍ?' : '🗑️ ລຶບ'}</button>`
+          : (i.sold || !waLink(i.contact) ? '' : `<a class="btn sm" href="${waLink(i.contact, 'ສະບາຍດີ ສົນໃຈໄອດີ: ' + i.game + ' - ' + i.title)}" target="_blank" rel="noopener">💬 ສັ່ງຊື້</a>`)}
+      </div>
+    </article>`).join('') : `<div class="empty">${isAdmin() ? 'ຍັງບໍ່ມີໄອດີ ກົດ "ເພີ່ມໄອດີ" ເພື່ອເລີ່ມຂາຍ' : 'ບໍ່ພົບໄອດີທີ່ຄົ້ນຫາ'}</div>`;
+}
+
+$('#lf').addEventListener('submit', e => {
+  e.preventDefault();
+  if ($('#u').value.trim().toLowerCase() === ADMIN_USER && $('#p').value === ADMIN_PASS){
+    role = 'admin'; ssSet(ROLE, role); $('#le').textContent = ''; $('#p').value = ''; render();
+  } else { $('#le').textContent = 'ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ'; $('#p').value = ''; }
+});
+$('#guest').onclick = () => { role = 'guest'; ssSet(ROLE, role); render(); };
+$('#out').onclick = () => { role = null; ssSet(ROLE, null); render(); };
+$('#theme').onclick = () => { const d = document.documentElement, dark = d.dataset.theme ? d.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; d.dataset.theme = dark ? 'light' : 'dark'; };
+$('#q').oninput = e => { q = e.target.value; render(); };
+$('#chips').onclick = e => { const b = e.target.closest('[data-g]'); if (b){ gm = b.dataset.g; render(); } };
+$('#grid').onclick = e => {
+  const l = e.target.closest('[data-lb]');
+  if (l){ const it = items.find(i => i.id === l.dataset.lb); if (it) openLb(it.imgs, 0); return; }
+  if (!isAdmin()) return;
+  const ed = e.target.closest('[data-edit]');
+  if (ed){ openForm(items.find(i => i.id === ed.dataset.edit)); return; }
+  const s = e.target.closest('[data-sold]'), d = e.target.closest('[data-del]');
+  if (s){ const it = items.find(i => i.id === s.dataset.sold); it.sold = !it.sold; save(); render(); }
+  if (d){
+    if (armed === d.dataset.del){ items = items.filter(i => i.id !== armed); armed = null; save(); toast('ລຶບແລ້ວ'); }
+    else { armed = d.dataset.del; setTimeout(() => { armed = null; render(); }, 3000); }
+    render();
+  }
+};
+$('#sort').onchange = e => { sortBy = e.target.value; render(); };
+
+/* ---------- ຮູບ ---------- */
+function compress(file, M = 900, Q = .72){
+  return new Promise((res, rej) => {
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      const r = Math.min(1, M / Math.max(im.width, im.height)), c = document.createElement('canvas');
+      c.width = Math.round(im.width * r); c.height = Math.round(im.height * r);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(u); res(c.toDataURL('image/jpeg', Q));
+    };
+    im.onerror = () => { URL.revokeObjectURL(u); rej(); };
+    im.src = u;
+  });
+}
+async function addFiles(files){
+  const arr = [...files].filter(f => f.type.startsWith('image/'));
+  if (!arr.length){ $('#ae').textContent = 'ກະລຸນາເລືອກໄຟລ໌ຮູບເທົ່ານັ້ນ'; return; }
+  $('#ae').textContent = '';
+  for (const f of arr){
+    if (pics.length >= MAXP){ $('#ae').textContent = 'ໃສ່ຮູບໄດ້ສູງສຸດ ' + MAXP + ' ຮູບ'; break; }
+    try { pics.push(await compress(f)); } catch(_){ $('#ae').textContent = 'ເປີດຮູບບາງໄຟລ໌ບໍ່ໄດ້'; }
+    renderPics();
+  }
+}
+function renderPics(){
+  $('#photos').innerHTML = pics.map((p, i) => `<div class="pt"><img src="${p}" alt="ຮູບ ${i + 1}">${i === 0 ? '<span class="main">ໜ້າປົກ</span>' : ''}<button type="button" data-rm="${i}" aria-label="ລຶບຮູບ">✕</button></div>`).join('')
+    + (pics.length < MAXP ? '<label class="addph" for="file"><span><b>+</b>ເພີ່ມຮູບ</span></label>' : '');
+}
+$('#photos').onclick = e => { const b = e.target.closest('[data-rm]'); if (b){ pics.splice(+b.dataset.rm, 1); renderPics(); } };
+$('#file').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+const ph = $('#photos');
+['dragenter','dragover'].forEach(t => ph.addEventListener(t, e => { e.preventDefault(); ph.classList.add('drag'); }));
+['dragleave','drop'].forEach(t => ph.addEventListener(t, e => { e.preventDefault(); ph.classList.remove('drag'); }));
+ph.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+
+/* ---------- Lightbox ---------- */
+function openLb(list, i){ lbList = list || []; lbI = i; if (!lbList.length) return; showLb(); $('#lb').showModal(); }
+function showLb(){ $('#lbi').src = lbList[lbI]; $('#lbc').textContent = (lbI + 1) + ' / ' + lbList.length; $('#lbp').disabled = $('#lbn').disabled = lbList.length < 2; }
+const stepLb = d => { lbI = (lbI + d + lbList.length) % lbList.length; showLb(); };
+$('#lbp').onclick = () => stepLb(-1); $('#lbn').onclick = () => stepLb(1); $('#lbx').onclick = () => $('#lb').close();
+$('#lb').addEventListener('click', e => { if (e.target.id === 'lb') $('#lb').close(); });
+$('#lb').addEventListener('keydown', e => { if (e.key === 'ArrowLeft') stepLb(-1); if (e.key === 'ArrowRight') stepLb(1); });
+
+/* ---------- ຟອມເພີ່ມ / ແກ້ໄຂ ---------- */
+function openForm(it){
+  editId = it ? it.id : null;
+  $('#af').reset(); $('#ae').textContent = '';
+  $('#dt').textContent = it ? '✏️ ແກ້ໄຂໄອດີ' : '➕ ເພີ່ມໄອດີຂາຍ';
+  pics = it ? [...(it.imgs || [])] : [];
+  if (it){ $('#g').value = it.game; $('#t').value = it.title; $('#lv').value = it.level || ''; $('#pr').value = it.price; $('#ct').value = it.contact || ''; $('#nt').value = it.note || ''; }
+  renderPics(); $('#dlg').showModal();
+}
+$('#add').onclick = () => openForm(null);
+$('#cx').onclick = () => $('#dlg').close();
+$('#af').addEventListener('submit', e => {
+  e.preventDefault();
+  const game = $('#g').value.trim(), title = $('#t').value.trim(), price = parseFloat($('#pr').value);
+  if (!game || !title || !(price >= 0)){ $('#ae').textContent = 'ກະລຸນາໃສ່ຊື່ເກມ, ຫົວຂໍ້ ແລະ ລາຄາໃຫ້ຖືກຕ້ອງ'; return; }
+  const data = {game, title, price, level: $('#lv').value.trim(), contact: $('#ct').value.trim(), note: $('#nt').value.trim(), imgs: [...pics]};
+  const backup = items;
+  if (editId) items = items.map(i => i.id === editId ? {...i, ...data} : i);
+  else items = [{id: 'x' + Date.now().toString(36), sold: false, ...data}, ...items];
+  if (!save()){ items = backup; return; }
+  $('#dlg').close(); render(); toast(editId ? 'ບັນທຶກການແກ້ໄຂແລ້ວ' : 'ເພີ່ມໄອດີແລ້ວ');
+});
+
+/* ---------- ວົງລໍ້ສຸ່ມ ---------- */
+const WKEY = 'gameid_wheel_v1', WCOL = ['#e63e68','#0a8fb0','#f5a623','#7c4dff','#12a36f','#ff7a45','#3b82f6','#d946ef','#84cc16','#06b6d4','#ef4444','#a855f7'];
+const eqSplit = a => { const n = a.length, b = Math.floor(1000 / n) / 10; a.forEach(w => w.p = b); a[n - 1].p = Math.round((100 - b * (n - 1)) * 10) / 10; };
+const wnorm = l => { const r = l.map(v => typeof v === 'string' ? {t: v, img: '', p: null} : {t: String(v.t || ''), img: v.img || '', p: (typeof v.p === 'number' && v.p >= 0) ? v.p : null}); if (r.some(w => w.p == null)) eqSplit(r); return r; };
+let wheel = (() => { try { const d = JSON.parse(lsGet(WKEY)); if (Array.isArray(d) && d.length >= 2) return wnorm(d); } catch(_){} return wnorm(['ຫຼຸດ 5%','ຫຼຸດ 10%','ຫຼຸດ 20%','ແຖມສກິນ','ລອງໃໝ່','ໄອດີຟຣີ']); })();
+let wdraft = [], wrot = 0, spinning = false;
+const wcache = {};
+function wimg(src){
+  let im = wcache[src];
+  if (!im){ im = wcache[src] = new Image(); im.onload = drawWheel; im.src = src; }
+  return im.complete && im.naturalWidth ? im : null;
+}
+function drawWheel(){
+  const c = $('#wheel'), x = c.getContext('2d'), n = wheel.length, R = c.width / 2, a = 2 * Math.PI / n;
+  x.clearRect(0, 0, c.width, c.height);
+  wheel.forEach((w, i) => {
+    x.beginPath(); x.moveTo(R, R); x.arc(R, R, R - 4, -Math.PI / 2 + i * a, -Math.PI / 2 + (i + 1) * a); x.closePath();
+    x.fillStyle = WCOL[i % WCOL.length]; x.fill(); x.strokeStyle = 'rgba(255,255,255,.85)'; x.lineWidth = 3; x.stroke();
+    x.save(); x.translate(R, R); x.rotate(-Math.PI / 2 + (i + .5) * a);
+    const im = w.img ? wimg(w.img) : null;
+    x.textBaseline = 'middle'; x.fillStyle = '#fff';
+    if (im){
+      const cx = R * .72, rad = Math.min(42, Math.max(24, Math.sin(a / 2) * cx * .8));
+      x.save(); x.beginPath(); x.arc(cx, 0, rad, 0, 7); x.clip();
+      const k = Math.max(rad * 2 / im.naturalWidth, rad * 2 / im.naturalHeight), dw = im.naturalWidth * k, dh = im.naturalHeight * k;
+      x.drawImage(im, cx - dw / 2, -dh / 2, dw, dh); x.restore();
+      x.beginPath(); x.arc(cx, 0, rad, 0, 7); x.lineWidth = 4; x.strokeStyle = '#fff'; x.stroke();
+      const end = cx - rad - 10, mw = end - 60; let fs = 30; x.font = `700 ${fs}px 'Noto Sans Lao',sans-serif`;
+      while (x.measureText(w.t).width > mw && fs > 14){ fs -= 2; x.font = `700 ${fs}px 'Noto Sans Lao',sans-serif`; }
+      x.textAlign = 'right'; x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 4; x.fillText(w.t, end, 0);
+    } else {
+      let fs = 34; x.font = `700 ${fs}px 'Noto Sans Lao',sans-serif`;
+      while (x.measureText(w.t).width > R - 110 && fs > 16){ fs -= 2; x.font = `700 ${fs}px 'Noto Sans Lao',sans-serif`; }
+      x.textAlign = 'right'; x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 4; x.fillText(w.t, R - 36, 0);
+    }
+    x.restore();
+  });
+}
+function spin(){
+  if (spinning) return;
+  spinning = true; $('#spin').disabled = true; $('#wres').textContent = '…';
+  const n = wheel.length, s = 360 / n, jit = (Math.random() - .5) * s * .7;
+  let r = Math.random() * wheel.reduce((a, w) => a + w.p, 0), i = 0;
+  for (; i < n - 1; i++){ if (r < wheel[i].p) break; r -= wheel[i].p; }
+  while (i > 0 && wheel[i].p <= 0) i--;
+  wrot = wrot - (wrot % 360) + 360 * 6 + (360 - (i + .5) * s) + jit;
+  const c = $('#wheel'); c.style.transform = `rotate(${wrot}deg)`;
+  const done = () => {
+    c.removeEventListener('transitionend', done); clearTimeout(fb); if (!spinning) return; spinning = false; $('#spin').disabled = false;
+    const w = wheel[i]; $('#wres').innerHTML = (w.img ? `<img src="${w.img}" alt="">` : '') + '🎉 ' + esc(w.t);
+  };
+  const fb = setTimeout(done, 5200); c.addEventListener('transitionend', done);
+}
+function renderWList(){
+  $('#wlist').innerHTML = wdraft.map((w, i) => `<div class="wrow"><span class="sw" style="background:${WCOL[i % WCOL.length]};align-self:stretch"></span>
+    <label class="wimg ${w.img ? 'has' : ''}" title="ເພີ່ມຮູບລາງວັນ">${w.img ? `<img src="${w.img}" alt="">` : '🖼️'}<input type="file" accept="image/*" data-wf="${i}"></label>
+    ${w.img ? `<button class="wrm" type="button" data-wr="${i}" title="ລຶບຮູບ">ລຶບຮູບ</button>` : ''}
+    <input value="${esc(w.t)}" maxlength="24" data-wi="${i}" aria-label="ລາງວັນ ${i + 1}">
+    <input class="wp" type="number" min="0" max="100" step="0.1" value="${w.p}" data-wp="${i}" aria-label="ໂອກາດ %"><span class="pc">%</span>
+    <button class="btn warn sm" type="button" data-wd="${i}" aria-label="ລຶບຊ່ອງ">✕</button></div>`).join('');
+  updTot();
+}
+function updTot(){
+  const t = Math.round(wdraft.reduce((a, w) => a + (Number(w.p) || 0), 0) * 10) / 10, ok = Math.abs(t - 100) < .05, el = $('#wtot');
+  el.textContent = 'ລວມ: ' + t + '%' + (ok ? ' ✓' : ' — ຕ້ອງລວມໃຫ້ໄດ້ 100%'); el.className = 'hint ' + (ok ? 'ok' : 'bad');
+}
+$('#wbtn').onclick = () => {
+  $('#wres').textContent = ''; $('#wed').classList.toggle('hidden', !isAdmin());
+  if (isAdmin()){ wdraft = wheel.map(w => ({...w})); renderWList(); $('#wer').textContent = ''; }
+  drawWheel(); $('#wd').showModal();
+};
+$('#wx').onclick = () => $('#wd').close();
+$('#spin').onclick = spin;
+$('#wlist').addEventListener('input', e => { const i = e.target.dataset.wi, p = e.target.dataset.wp; if (i != null) wdraft[+i].t = e.target.value; if (p != null){ wdraft[+p].p = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0)); updTot(); } });
+$('#weq').onclick = () => { eqSplit(wdraft); renderWList(); };
+$('#wlist').addEventListener('change', async e => {
+  const i = e.target.dataset.wf; if (i == null || !e.target.files[0]) return;
+  if (!e.target.files[0].type.startsWith('image/')){ $('#wer').textContent = 'ກະລຸນາເລືອກໄຟລ໌ຮູບເທົ່ານັ້ນ'; return; }
+  try { wdraft[+i].img = await compress(e.target.files[0], 220, .75); $('#wer').textContent = ''; renderWList(); }
+  catch(_){ $('#wer').textContent = 'ເປີດຮູບນີ້ບໍ່ໄດ້'; }
+});
+$('#wlist').addEventListener('click', e => {
+  const r = e.target.closest('[data-wr]'); if (r){ wdraft[+r.dataset.wr].img = ''; renderWList(); return; }
+  const b = e.target.closest('[data-wd]'); if (b){ if (wdraft.length <= 2){ $('#wer').textContent = 'ຕ້ອງມີຢ່າງໜ້ອຍ 2 ຊ່ອງ'; return; } wdraft.splice(+b.dataset.wd, 1); renderWList(); }
+});
+$('#wadd').onclick = () => { if (wdraft.length >= 12){ $('#wer').textContent = 'ເພີ່ມໄດ້ສູງສຸດ 12 ຊ່ອງ'; return; } wdraft.push({t: '', img: '', p: 0}); renderWList(); $('#wlist').querySelector('.wrow:last-child input[data-wi]').focus(); };
+$('#wsave').onclick = () => {
+  const l = wdraft.map(w => ({t: w.t.trim(), img: w.img, p: Math.round((Number(w.p) || 0) * 10) / 10})).filter(w => w.t);
+  if (l.length < 2){ $('#wer').textContent = 'ກະລຸນາໃສ່ຊື່ລາງວັນຢ່າງໜ້ອຍ 2 ຊ່ອງ'; return; }
+  const tot = l.reduce((a, w) => a + w.p, 0);
+  if (Math.abs(tot - 100) > .05){ $('#wer').textContent = 'ເປີເຊັນລວມຕ້ອງເທົ່າ 100% (ຕອນນີ້ ' + Math.round(tot * 10) / 10 + '%)'; return; }
+  const old = wheel; wheel = l;
+  if (!lsSet(WKEY, JSON.stringify(wheel))){ wheel = old; $('#wer').textContent = 'ພື້ນທີ່ເກັບຂໍ້ມູນເຕັມ — ລຶບຮູບບາງອັນອອກ'; return; }
+  toast('ບັນທຶກວົງລໍ້ແລ້ວ');
+  wdraft = wheel.map(w => ({...w})); renderWList(); $('#wer').textContent = ''; $('#wres').textContent = ''; drawWheel();
+};
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawWheel);
+render();
+</script>
+</body>
+</html>
